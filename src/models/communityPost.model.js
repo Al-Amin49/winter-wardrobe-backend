@@ -11,7 +11,7 @@ const commentSchema= new Schema({
         required:true
     },
 }, {timestamps:true})
-const communitySchema= new Schema(
+const communityPostSchema= new Schema(
     {
     author:{
         type:mongoose.Schema.Types.ObjectId,
@@ -26,8 +26,12 @@ const communitySchema= new Schema(
         type:Number,
         default:0
     },
+    likedBy: [{ 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      }],
     comments:[commentSchema]
     },
     {timestamps:true}
 )
-export const Community= mongoose.model('Community', communitySchema)
+export const CommunityPost= mongoose.model('CommunityPost', communityPostSchema)
