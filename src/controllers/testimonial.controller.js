@@ -10,20 +10,19 @@ import { asyncHandler } from "../utils/asyncHandler.js";
  */
 
 const postTestimonial = asyncHandler(async (req, res) => {
-  const { user, title, message, location, rating } = req.body;
+  const { username, message, location, rating } = req.body;
 
   //validate the input
-  if (!user || !title || !message || !location || !rating === undefined) {
-    throw new ApiError(400, "All fields are required");
-  }
+  // if (!username ||  !message || !location || !rating === undefined) {
+  //   throw new ApiError(400, "All fields are required");
+  // }
   //ensure the rating range is within the allowed range
   if (rating < 1 || rating > 5) {
     throw new ApiError(400, "Rating must be between 1 and 5");
   }
 
   const newTestimonail = await Testimonial.create({
-    user,
-    title,
+    username,
     message,
     location,
     rating,
@@ -42,9 +41,6 @@ const postTestimonial = asyncHandler(async (req, res) => {
 const getAllTestimonials = asyncHandler(async (_, res) => {
 
   const testimonials = await Testimonial.find()
-    .populate("user", "username email") 
-    .limit(6)
-  
   if (!testimonials) {
     throw new ApiError(404, "Testimonials not found");
   }
