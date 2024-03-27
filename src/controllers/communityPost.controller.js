@@ -1,6 +1,7 @@
-import { CommunityPost } from "../models/communityPost.model";
+import { CommunityPost } from "../models/communityPost.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import {ApiResponse} from '../utils/ApiResponse.js';
 
 /*-------------------
 @desc     Add a new community
@@ -23,10 +24,15 @@ const addCommunityPost = asyncHandler(async (req, res) => {
       new ApiResponse(200, newCommunity, "add community post successfully")
     );
 });
+/*-------------------
+@desc     get all community
+@route    GET /api/v1/communities
+@access   Public
+*/
 
 const getAllCommunityPost = asyncHandler(async (req, res) => {
   const communitiesPost = await CommunityPost.find()
-    .populate("author", "username")
+    .populate("author", "username profile")
     .exec();
   res
     .status(200)
