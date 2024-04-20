@@ -9,13 +9,15 @@ import {ApiResponse} from '../utils/ApiResponse.js';
 @access   private
 */
 const addCommunityPost = asyncHandler(async (req, res) => {
-  const { author, content } = req.body;
+  const { content } = req.body;
+  const userId= req.user._id;
+  console.log(userId)
 
-  if (!author || !content) {
-    throw new ApiError(400, "All fields are required");
+  if (!content) {
+    throw new ApiError(400, "content are required");
   }
   const newCommunity = await CommunityPost.create({
-    author,
+    author: userId,
     content,
   });
   res
@@ -33,6 +35,7 @@ const addCommunityPost = asyncHandler(async (req, res) => {
 const getAllCommunityPost = asyncHandler(async (req, res) => {
   const communitiesPost = await CommunityPost.find()
     .populate("author", "username profile")
+    .sort({ createdAt: -1 })
     .exec();
   res
     .status(200)
