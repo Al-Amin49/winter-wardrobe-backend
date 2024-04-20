@@ -26,6 +26,22 @@ const addCommunityPost = asyncHandler(async (req, res) => {
       new ApiResponse(200, newCommunity, "add community post successfully")
     );
 });
+
+/*-------------------
+@desc     get all community by id
+@route    GET /api/v1/communities/:id
+@access   Public
+*/
+const getSinglePost= asyncHandler(async(req, res)=>{
+  const singlePost = await CommunityPost.findById(req.params.id);
+  if (!singlePost) {
+    throw new ApiError(404, "Post not found");
+  }
+  res
+    .status(200)
+    .json(new ApiResponse(200, singlePost, "Single Post fetched Succesfully"));
+
+})
 /*-------------------
 @desc     get all community
 @route    GET /api/v1/communities
@@ -46,5 +62,6 @@ const getAllCommunityPost = asyncHandler(async (req, res) => {
 
 export const communiPostController={
     addCommunityPost,
-    getAllCommunityPost
+    getAllCommunityPost,
+    getSinglePost
 }

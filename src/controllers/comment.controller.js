@@ -43,7 +43,8 @@ const addComment = asyncHandler(async (req, res) => {
   const getAllComments = asyncHandler(async (req, res) => {
     const postId = req.params.postId;
   
-    const communityPost = await CommunityPost.findById(postId);
+    const communityPost = await CommunityPost.findById(postId)
+    .populate("comments.author", "username profile")
   
     if (!communityPost) {
       throw new ApiError(404, "Community post not found");
