@@ -33,7 +33,8 @@ const addCommunityPost = asyncHandler(async (req, res) => {
 @access   Public
 */
 const getSinglePost= asyncHandler(async(req, res)=>{
-  const singlePost = await CommunityPost.findById(req.params.id);
+  const singlePost = await CommunityPost.findById(req.params.id)
+  .populate("author", "username profile")
   if (!singlePost) {
     throw new ApiError(404, "Post not found");
   }
