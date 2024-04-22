@@ -1,6 +1,8 @@
+import mongoose from "mongoose";
+import { Schema } from "mongoose";
 
 
-const volunteerSchema = new mongoose.Schema({
+const volunteerSchema = new Schema({
     name: {
       type: String,
       required: true
@@ -14,9 +16,17 @@ const volunteerSchema = new mongoose.Schema({
       type: String,
       required: true
     },
+    image:{
+        type:String,
+        required:true
+    },
     location: {
       type: String,
       required: true
+    },
+    approve:{
+        type:Boolean,
+        default:false
     },
     availability: {
       weekdays: Boolean,
