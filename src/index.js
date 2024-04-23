@@ -6,6 +6,7 @@ import userRoutes from './routes/user.routes.js';
 import clotheRoutes from './routes/clothe.routes.js';
 import testimonialRoute from './routes/testimonial.routes.js';
 import communityRoutes from './routes/communityPost.routes.js'
+import volunteerRoutes from './routes/volunteer.routes.js'
 import cookieParser from 'cookie-parser';
 dotenv.config();
 const app = express();
@@ -27,6 +28,7 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/clothes', clotheRoutes);
 app.use('/api/v1/testimonial', testimonialRoute);
 app.use('/api/v1/communities', communityRoutes);
+app.use('/api/v1/volunteers', volunteerRoutes);
 
 app.get("/", (req, res) => {
   res.json({ msg: "hello world" });
