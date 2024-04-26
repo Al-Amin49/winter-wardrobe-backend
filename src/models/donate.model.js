@@ -13,6 +13,10 @@ const donateSchema= new Schema(
             ref:'Clothe',
             required:true
         },
+        quantity:{
+            type: Number,
+            required:true
+        }
 
 
     },
