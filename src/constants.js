@@ -1,1 +1,1 @@
-export const DB_NAME='winter-wardrobe'
+export const DB_NAME='winter-wardrobe';

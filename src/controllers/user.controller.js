@@ -22,12 +22,13 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   const createdUser = await User.findById(user._id).select("-password");
+  const token = user.generateAuthToken();
   if (!createdUser) {
     throw new ApiError(500, "Something went wrong while registering the user");
   }
   res
     .status(201)
-    .json(new ApiResponse(200, user, "User registered succesfully"));
+    .json(new ApiResponse(200, user,token, "User registered succesfully"));
 });
 /*-------------------
 @desc     Auth user & get token
