@@ -72,8 +72,27 @@ export const getUserDetails=asyncHandler(async(req, res)=>{
     throw new ApiError(404, 'User Not found')
  }
 })
+
+/*-------------------
+@desc     Auth user
+@route    POST api/v1/users/login
+@access  public
+*/
+export const getAllUser = asyncHandler(async (req, res) => {
+  // Retrieve all users, excluding passwords from the results
+  const users = await User.find().select('-password');
+
+  if (!users) {
+    throw new ApiError(404, "No users found");
+  }
+
+  // Send the response with the list of users
+  res.status(200).json(new ApiResponse(200, users, "Users retrieved successfully"));
+});
+
 export const userControllers = {
   registerUser,
   loginUser,
-  getUserDetails
+  getUserDetails,
+  getAllUser
 };

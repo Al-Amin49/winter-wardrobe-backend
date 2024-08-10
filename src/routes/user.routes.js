@@ -8,5 +8,6 @@ router.route('/register').post(userControllers.registerUser);
 router.route('/login').post(userControllers.loginUser);
 //secured route
 router.route('/user-details').get(protect, userControllers.getUserDetails);
+router.route('/allusers').get( userControllers.getAllUser);
 
 export default router;
