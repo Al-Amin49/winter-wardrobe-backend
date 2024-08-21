@@ -92,8 +92,47 @@ const getSingleDonate = asyncHandler(async (req, res) => {
     );
 });
 
+/*-------------------
+@desc     Get donation statistics by category
+@route    GET /api/v1/donates/stats/categories
+@access   Public
+*/
+const getDonationsByCategory = asyncHandler(async (req, res) => {
+  const stats = await Donate.aggregate([
+    {
+      $lookup: {
+        from: "clothes",
+        localField: "clotheId",
+        foreignField: "_id",
+        as: "clothe",
+      },
+    },
+    {
+      $unwind: "$clothe",
+    },
+    {
+      $group: {
+        _id: "$clothe.category",
+        totalDonations: { $sum: "$quantity" },
+      },
+    },
+    {
+      $sort: { totalDonations: -1 },
+    },
+  ]);
+
+  if (stats.length > 0) {
+    res.status(200).json(new ApiResponse(200, stats, "Donation stats by category fetched successfully"));
+  } else {
+    throw new ApiError("No donations found", 404);
+  }
+});
+
 export const donateControllers = {
   addDonate,
   getWhoMostDonate,
   getSingleDonate,
+  getDonationsByCategory
+
+
 };
