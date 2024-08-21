@@ -163,7 +163,7 @@ const getAllDonations = asyncHandler(async (req, res) => {
   if (donations.length > 0) {
     res
       .status(200)
-      .json(new ApiResponse(200, donations, "All donations fetched successfully"));
+      .json(new ApiResponse(200, donations,"All donations fetched successfully"));
   } else {
     throw new ApiError("No donations found", 404);
   }

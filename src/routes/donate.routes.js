@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.route("/").post(protect, donateControllers.addDonate);
 router.route("/recent").get(donateControllers.getRecentDonations);
+router.route("/").get(donateControllers.getAllDonations);
 router.route("/category").get(donateControllers.getDonationsByCategory);
 router.route("/leaderboard").get(donateControllers.getWhoMostDonate);
 
