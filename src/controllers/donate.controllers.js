@@ -128,11 +128,52 @@ const getDonationsByCategory = asyncHandler(async (req, res) => {
   }
 });
 
+/*-------------------
+@desc     Get recent donations
+@route    GET /api/v1/donate/recent
+@access   Public
+*/
+const getRecentDonations = asyncHandler(async (req, res) => {
+  const recentDonations = await Donate.find({})
+    .populate("userId", "username profile")
+    .populate("clotheId", "title category")
+    .sort({ createdAt: -1 }) // Sort by most recent
+    .limit(5); // Limit the number of results (e.g., 5 recent donations)
+
+  if (recentDonations.length > 0) {
+    res
+      .status(200)
+      .json(new ApiResponse(200, recentDonations, "Recent donations fetched successfully"));
+  } else {
+    throw new ApiError("No donations found", 404);
+  }
+});
+
+/*-------------------
+@desc     Get all donations
+@route    GET /api/v1/donates
+@access   Public
+*/
+const getAllDonations = asyncHandler(async (req, res) => {
+  const donations = await Donate.find({})
+    .populate("userId", "username profile")
+    .populate("clotheId", "title category")
+    .sort({ createdAt: -1 }); // Sort by most recent donations first
+
+  if (donations.length > 0) {
+    res
+      .status(200)
+      .json(new ApiResponse(200, donations, "All donations fetched successfully"));
+  } else {
+    throw new ApiError("No donations found", 404);
+  }
+});
 export const donateControllers = {
   addDonate,
   getWhoMostDonate,
   getSingleDonate,
-  getDonationsByCategory
-
+  getDonationsByCategory,
+  getRecentDonations,
+  getAllDonations
 
 };
