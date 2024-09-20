@@ -11,21 +11,52 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 @access   private
 */
 const addDonate = asyncHandler(async (req, res) => {
-  const donationData= req.body;
-  const user = await User.findOne();
-  const clothe = await Clothe.findOne();
+  // Get the donation data from the request body
+  const { email, quantity, clotheId } = req.body;
 
+  // Ensure userId is taken from authenticated user
+  const userId = req.user._id;
+
+  // Validate that the clothe exists
+  const clothe = await Clothe.findById(clotheId);
+  if (!clothe) {
+    throw new ApiError("Clothe not found", 404);
+  }
+
+  // Create the new donation with correct userId and clotheId
   const newDonation = await Donate.create({
-  ...donationData,
-  userId:user._id,
-  clotheId:clothe._id
+    email,
+    userId, 
+    clotheId, 
+    quantity
   });
 
-  res
-    .status(201)
-    .json(new ApiResponse(200, newDonation, "Donation added successfully"));
+  res.status(201).json(new ApiResponse(200, newDonation, "Donation added successfully"));
 });
 
+/*-------------------
+@desc     Get user donation history by email
+@route    GET /api/v1/donates/user/:email
+@access   Private
+*/
+const getUserDonationsByEmail = asyncHandler(async (req, res) => {
+  const { email } = req.params;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new ApiError("User not found", 404);
+  }
+
+  const donations = await Donate.find({ userId: user._id })
+    .populate("clotheId", "title category")
+    .sort({ createdAt: -1 });
+
+  if (donations.length === 0) {
+    throw new ApiError("No donations found for this user", 404);
+  }
+
+  res.status(200).json(new ApiResponse(200, donations, "User donation history fetched successfully"));
+});
 /*-------------------
 @desc     Get the user who donated the most
 @route    GET /api/v1/donates/leaderboard
@@ -157,6 +188,7 @@ export const donateControllers = {
   getWhoMostDonate,
   getDonationsByCategory,
   getRecentDonations,
-  getAllDonations
+  getAllDonations,
+  getUserDonationsByEmail
 
 };

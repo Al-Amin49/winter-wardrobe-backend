@@ -3,6 +3,11 @@ import mongoose, { Schema } from "mongoose";
 
 const donateSchema= new Schema(
     {
+        email:{
+            type:String,
+            required:true
+        
+        },
         userId:{
             type:mongoose.Schema.Types.ObjectId,
             ref:'User',
