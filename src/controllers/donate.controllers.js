@@ -1,4 +1,6 @@
+import { Clothe } from "../models/clothes.model.js";
 import { Donate } from "../models/donate.model.js";
+import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -9,17 +11,14 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 @access   private
 */
 const addDonate = asyncHandler(async (req, res) => {
-  const { userId, clotheId, quantity } = req.body;
-
-  // Validate request body
-  // if (!userId || !clotheId || !quantity) {
-  //   throw new ApiError("All fields are required", 400);
-  // }
+  const donationData= req.body;
+  const user = await User.findOne();
+  const clothe = await Clothe.findOne();
 
   const newDonation = await Donate.create({
-    userId,
-    clotheId,
-    quantity,
+  ...donationData,
+  userId:user._id,
+  clotheId:clothe._id
   });
 
   res
@@ -76,21 +75,6 @@ const getWhoMostDonate = asyncHandler(async (req, res) => {
   }
 });
 
-const getSingleDonate = asyncHandler(async (req, res) => {
-  const singleGetDonate = await Donate.findById(req.params.id)
-    .populate("userId", "username")
-    .populate("clotheId", "title");
-
-  if (!singleGetDonate) {
-    throw new ApiError(404, "Donate not found");
-  }
-
-  res
-    .status(200)
-    .json(
-      new ApiResponse(200, singleGetDonate, "Single donate get successufully")
-    );
-});
 
 /*-------------------
 @desc     Get donation statistics by category
@@ -171,7 +155,6 @@ const getAllDonations = asyncHandler(async (req, res) => {
 export const donateControllers = {
   addDonate,
   getWhoMostDonate,
-  getSingleDonate,
   getDonationsByCategory,
   getRecentDonations,
   getAllDonations
