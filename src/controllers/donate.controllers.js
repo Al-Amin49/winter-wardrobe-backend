@@ -36,7 +36,7 @@ const addDonate = asyncHandler(async (req, res) => {
 
 /*-------------------
 @desc     Get user donation history by email
-@route    GET /api/v1/donates/user/:email
+@route    GET /api/v1/donate/user/:email
 @access   Private
 */
 const getUserDonationsByEmail = asyncHandler(async (req, res) => {
