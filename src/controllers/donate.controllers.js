@@ -48,6 +48,7 @@ const getUserDonationsByEmail = asyncHandler(async (req, res) => {
   }
 
   const donations = await Donate.find({ userId: user._id })
+    .populate("userId", "username profile")
     .populate("clotheId", "title category")
     .sort({ createdAt: -1 });
 
