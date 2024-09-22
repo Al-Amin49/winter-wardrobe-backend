@@ -8,6 +8,8 @@ import {ApiResponse} from '../utils/ApiResponse.js';
 @route    POST /api/v1/communities
 @access   private
 */
+/* The `addCommunityPost` function is a controller function that handles the logic for adding a new
+community post. Here is a breakdown of what it does: */
 const addCommunityPost = asyncHandler(async (req, res) => {
   const { content } = req.body;
   const userId= req.user._id;
